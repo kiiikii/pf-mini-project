@@ -1,5 +1,10 @@
 #!/bin/bash
 
+merah="\e[31m✗"
+hijau="\e[32m✓ "
+bold="\e[1m"
+reset="\e[0m"
+
 # deklarasi variabel array
 declare -a todo_list
 declare -a task_name
@@ -30,4 +35,4 @@ add_task() {
          task_name += ("$task")
          task_status += ("Pending")
          todo_list += ("$task - Pending")
-         echo ""
+         echo "${hijau}Tugas '$task' berhasil ditambah.${reset}"
