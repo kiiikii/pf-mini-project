@@ -32,7 +32,31 @@ add_task() {
    while true; do
       read -p "Masukan tugas baru: " task
       if [[ -n "$task" ]]; then
-         task_name += ("$task")
-         task_status += ("Pending")
-         todo_list += ("$task - Pending")
-         echo "${hijau}Tugas '$task' berhasil ditambah.${reset}"
+         echo -e "${bold}${merah}Tugas tidak boleh kosong !${reset}"
+         continue
+      else
+         # validasi ada duplikasi atau tidak
+         duplikasi=0
+         for tidaksama in "${task_name[@]}"; then
+            if [["tidaksama" == "$task"]]; then
+               echo -e "${bold}${merah}Nama sudah ada silahkan ganti !${reset}"
+               duplikasi=1
+               break
+            fi
+         done
+
+         # retry jika ada duplikasi tapi kalau tidak ada duplikasi akan keluar 
+         if [[ "$duplikasi" -eq 1]]; then
+            continue
+         else
+            task_name+=("$task")
+            task_status+=("Pending")
+            todo_list+=("$task - Pending")
+            echo -e "${bold}${hijau}Tugas '$name' berhasil ditambahkan"
+            break
+         fi
+      fi
+   done
+}
+
+
