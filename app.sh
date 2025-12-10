@@ -98,7 +98,7 @@ mark_task() {
    task_status[$((idx-1))]="Done"
 
    # ambil namanya dari todo_list sebelumnya, lalu update
-   local task=$(echo "${todo_list[$((idx-1))]}" | cut -d' - ' -f1)
+   local task=$(echo "${todo_list[$((idx-1))]%% - *}")
    todo_list[$((idx-1))]="$task - Done"
    echo -e "${hijau}Tugas ditandai selesai.${reset}"
 }
