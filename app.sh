@@ -15,7 +15,33 @@ declare -a task_status
 
 # function untuk menambah tugas
 add_task() {
-   
+   # ambil inputan dari user dengan validasi kosong dan duplikat dalam loop
+   while true; do
+     read -p "Nama tugas: " task
+     if [[ -z "$task" ]]; then
+       echo -e "${merah}Tugas tidak boleh kosong! silahkan coba lagi.${reset}"
+       continue
+     else
+       # cek duplikasi nama tugas
+       local duplikat=0 # variabel ini hanya berlaku didalam fungsi add_task
+       for existing in "${todo_list[@]}"; do
+         if [[ "$existing" == "$task - "* ]]; then # untuk cek duplikat
+           echo -e "${merah}Nama tugas sudah ada. Coba Lagi.${reset}"
+           duplikat=1
+           break
+         fi
+       done
+       if [[ $duplikat -eq 1 ]]; then
+         continue # ulangi ketika ada duplikasi
+       else
+         # jika tidak ada semua tambahkan kedalam array
+         todo_list+=("$task - Pending")
+         task_status+=("Pending")
+         echo -e "${hijau}Tugas berhasil ditambahkan.${reset}"
+         break
+       fi
+     fi
+   done
 }
 
 # function untuk menampilkan tugas
@@ -67,4 +93,10 @@ while true; do
          ;;
        6)
          echo "Keluar dari aplikasi"
+         exit 0
          ;;
+       *)
+         echo "Pilihan tidak ada. Silahkan pilih lagi"
+         ;;
+     esac
+done
