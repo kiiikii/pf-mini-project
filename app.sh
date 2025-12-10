@@ -26,7 +26,7 @@ add_task() {
        local duplikat=0 # variabel ini hanya berlaku didalam fungsi add_task
        for existing in "${todo_list[@]}"; do
          if [[ "$existing" == "$task - "* ]]; then # untuk cek duplikat
-           echo -e "${merah}Nama tugas sudah ada. Coba Lagi.${reset}"
+           echo -e "${kuning}Nama tugas sudah ada. Coba Lagi.${reset}"
            duplikat=1
            break
          fi
@@ -107,6 +107,10 @@ stat_todo() {
         tugas_pending=$((tugas_pending + 1))
       fi
    done
+   echo "Statistik tugas."
+   echo -e "${hijau}Tugas selesai: $tugas_selesai.${reset}"
+   echo -e "${kuning}Tugas belum selesai: $tugas_pending.${reset}"
+   echo "Total tugas: ${#todo_list[@]}"
 }
 
 # main menu utama dari apliaksi
