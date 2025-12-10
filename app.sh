@@ -124,7 +124,7 @@ stat_todo() {
 
 # main menu utama dari apliaksi
 while true; do
-     echo "${orange}========= To-do List - Menu =========${reset}"
+     echo -e "${orange}========= To-do List - Menu =========${reset}"
      echo "1. Lihat daftar tugas"
      echo "2. Tambah tugas"
      echo "3. Tandai tugas selesai"
