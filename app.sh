@@ -73,7 +73,7 @@ delete_task() {
 
    # mengambil inputan dari user tugas mana yang mau dihapus
    read -p "Masukan nomor tugas yang ingin dihapus: " idx
-   if [[ $idx =~ ^[0-9]+$ ]] && (( idx > 0 && idx <= ${#todo_list[@]} )); then
+   if [[ $idx =~ ^[0-9]+$ ]] && (( idx >= 1 && idx <= ${#todo_list[@]} )); then
      unset todo_list[$((idx-1))]
      unset task_status[$((idx-1))]
 
@@ -98,7 +98,7 @@ mark_task() {
    task_status[$((idx-1))]="Done"
 
    # ambil namanya dari todo_list sebelumnya, lalu update
-   local task=$(echo "${todo_list[$((idx-1))]}") | cut -d' - ' -f1
+   local task=$(echo "${todo_list[$((idx-1))]}" | cut -d' - ' -f1)
    todo_list[$((idx-1))]="$task - Done"
    echo -e "${hijau}Tugas ditandai selesai.${reset}"
 }
@@ -152,7 +152,7 @@ while true; do
 
            # menerima inputan user untuk menandai tugas yang selesai
            read -p "Masukan nomor tugas yang selesai: " idx
-           if [[ $idx =~ ^[0-9]+$ ]] && (( idx > 0 && idx <= ${#todo_list[@]} )); then
+           if [[ $idx =~ ^[0-9]+$ ]] && (( idx >= 0 && idx <= ${#todo_list[@]} )); then
              mark_task "$idx"
            else
              echo -e "${merah}Input tidak valid!${reset}"
