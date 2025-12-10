@@ -79,12 +79,34 @@ delete_task() {
 
 # function untuk menandai tugas selesai
 mark_task() {
+   local idx="$1" # parameter nomor tugas (validasinya sudah ada diluar fungsi)
+   if [[ ${#todo_list[@]} -eq 0 ]]; then
+     echo -e "${merah}Tugas Kosong!${reset}"
+     return
+   fi
 
+   # update status di task_status dan todo_list
+   task_status[$((idx-1))]="Done"
+
+   # ambil namanya dari todo_list sebelumnya, lalu update
+   local task=$(echo "${todo_list[$((idx-1))]}") | cut -d' - ' -f1
+   todo_list[$((idx-1))]="$task - Done"
+   echo -e "${hijau}Tugas ditandai selesai.${reset}"
 }
 
 # function untuk statistik to-do
 stat_todo() {
-
+   local tugas_selesai=0
+   local tugas_pending=0
+   # looping untuk menghitung berapa banyak tugas yang selesai & pending
+   for status in "${task_status[@]}"; do
+      # jika tugas sudah ditandai selesai tambah tugas_selesai jika belum tambah tugas_pending
+      if [["$status" == "Done"]]; then
+        tugas_selesai=$((tugas_selesai + 1))
+      elif [["$status" == "Pending"]]; then
+        tugas_pending=$((tugas_pending + 1))
+      fi
+   done
 }
 
 # main menu utama dari apliaksi
@@ -92,7 +114,7 @@ while true; do
      echo "${orange}========= To-do List - Menu =========${reset}"
      echo "1. Lihat daftar tugas"
      echo "2. Tambah tugas"
-     echo "3. Tandi tugas selesai"
+     echo "3. Tandai tugas selesai"
      echo "4. Hapus tugas"
      echo "5. Lihat statistik"
      echo "6. Keluar"
@@ -106,7 +128,23 @@ while true; do
          add_task
          ;;
        3)
-         mark_task
+         if [[ ${#todo_list[@]} -eq 0 ]]; then
+           echo -e "${merah}Tugas Kosong!${reset}"
+         else
+           # untuk menampilkan list tugas
+           echo "Daftar list tugas"
+           for i in "${!todo_list[@]}"; do
+              echo "$((i+1)). ${todo_list[$i]}"
+           done
+
+           # menerima inputan user untuk menandai tugas yang selesai
+           read -p "Masukan nomor tugas yang selesai: " idx
+           if [[ $idx =~ ^[0-9]+$ ]] && (( idx > 0 && idx <= ${#todo_list[@]} )); then
+             mark_task "$idx"
+           else
+             echo -e "${merah}Input tidak valid!${reset}"
+           fi
+         fi
          ;;
        4)
          delete_task
