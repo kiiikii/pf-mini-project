@@ -47,7 +47,7 @@ add_task() {
 # function untuk menampilkan tugas
 display_todo() {
    if [ ${#todo_list[@]} -eq 0 ]; then
-     echo -e "${merah}Belum ada tugas."
+     echo -e "${merah}Belum ada tugas.${reset}"
      return
    fi
 
